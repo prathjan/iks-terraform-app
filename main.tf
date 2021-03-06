@@ -1,7 +1,11 @@
 provider "helm" {
   kubernetes {
-    config_path = "~/.kube/config"
+    config_path = var.kubeconfig
   }
+}
+
+variable "kubeconfig" {
+  type = string
 }
 
 resource helm_release nginx_ingress {
