@@ -4,6 +4,28 @@ provider "helm" {
   }
 }
 
+variable "host" {
+  type = string
+}
+variable "cluster" {
+  type = string
+}
+variable "certauthdata" {
+  type = string
+}
+variable "user" {
+  type = string
+}
+variable "context" {
+  type = string
+}
+variable "clientcertdata" {
+  type = string
+}
+variable "clientkeydata" {
+  type = string
+}
+
 locals {
  kubeconfig = <<KUBECONFIG
 apiVersion: v1
