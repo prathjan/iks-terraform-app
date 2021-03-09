@@ -1,6 +1,6 @@
 provider "helm" {
   kubernetes {
-    config_path = "/home/terraform/.kube/config" 
+    config_path = "/tmp/config" 
   }
 }
 
@@ -52,7 +52,7 @@ KUBECONFIG
 
 resource "local_file" "kubeconfig" {
   content  = local.kubeconfig
-  filename = "/home/terraform/.kube/config"
+  filename = "/tmp/config"
 }
 
 
