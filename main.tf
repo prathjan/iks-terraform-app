@@ -1,62 +1,55 @@
+# Intersight Provider Information
+terraform {
+  required_providers {
+    intersight = {
+      source = "CiscoDevNet/intersight"
+      version = "1.0.0"
+    }
+  }
+}
+
+provider "intersight" {
+  apikey        = var.api_key_id
+  secretkey = var.api_private_key
+  endpoint      = var.api_endpoint
+}
+
+data "intersight_kubernetes_cluster" "ikscluster" {
+  name  = var.iksclustername
+  moid = ""
+}
+
 provider "helm" {
   kubernetes {
     config_path = "/tmp/config" 
   }
 }
 
-variable "host" {
-  type = string
-}
-variable "cluster" {
-  type = string
-}
-variable "certauthdata" {
-  type = string
-}
-variable "user" {
-  type = string
-}
-variable "context" {
-  type = string
-}
-variable "clientcertdata" {
-  type = string
-}
-variable "clientkeydata" {
+
+variable "api_private_key" {
   type = string
 }
 
-locals {
- kubeconfig = <<KUBECONFIG
-apiVersion: v1
-clusters:
-- cluster:
-    certificate-authority-data: ${var.certauthdata} 
-    server: ${var.host}
-  name: ${var.cluster}
-contexts:
-- context:
-    cluster: ${var.cluster}
-    user: ${var.user}
-  name: ${var.context}
-current-context: ${var.context}
-kind: Config
-preferences: {}
-users:
-- name: ${var.user}
-  user:
-    client-certificate-data: ${var.clientcertdata} 
-    client-key-data: ${var.clientkeydata}
-KUBECONFIG
+variable "api_key_id" {
+  type = string
+}
+
+variable "api_endpoint" {
+  default = "https://www.intersight.com"
+}
+
+variable "iksclustername" {
+  type = string
 }
 
 resource "local_file" "kubeconfig" {
-  content  = local.kubeconfig
+  content  = base64decode(data.intersight_kubernetes_cluster.ikscluster.kube_config)
   filename = "/tmp/config"
 }
 
 
 resource helm_release nginx_ingress {
+  depends_on = [local_file.kubeconfig]
   name       = "nginx-ingress-controller"
 
   repository = "https://charts.bitnami.com/bitnami"
