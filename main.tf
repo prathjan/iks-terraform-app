@@ -3,7 +3,7 @@ terraform {
   required_providers {
     intersight = {
       source = "CiscoDevNet/intersight"
-      version = "1.0.0"
+      version = "1.0.2"
     }
   }
 }
@@ -21,7 +21,10 @@ data "intersight_kubernetes_cluster" "ikscluster" {
 
 provider "helm" {
   kubernetes {
-    config_path = "/tmp/config" 
+    host = local.kube_config.clusters[0].cluster.server
+    client_certificate = base64decode(local.kube_config.users[0].user.client-certificate-data)
+    client_key = base64decode(local.kube_config.users[0].user.client-key-data)
+    cluster_ca_certificate = base64decode(local.kube_config.clusters[0].cluster.certificate-authority-data)
   }
 }
 
@@ -42,14 +45,11 @@ variable "iksclustername" {
   type = string
 }
 
-resource "local_file" "kubeconfig" {
-  content  = base64decode(data.intersight_kubernetes_cluster.ikscluster.kube_config)
-  filename = "/tmp/config"
+locals {
+  kube_config = yamldecode(base64decode(data.intersight_kubernetes_cluster.ikscluster.results[0].kube_config))
 }
 
-
 resource helm_release nginx_ingress {
-  depends_on = [local_file.kubeconfig]
   name       = "nginx-ingress-controller"
 
   repository = "https://charts.bitnami.com/bitnami"
