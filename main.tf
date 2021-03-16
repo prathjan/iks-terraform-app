@@ -5,8 +5,13 @@ terraform {
       source = "CiscoDevNet/intersight"
       version = "1.0.2"
     }
+    helm = {
+      source = "hashicorp/helm"
+      version = "2.0.3"
+    }
   }
 }
+
 
 provider "intersight" {
   apikey        = var.api_key_id
