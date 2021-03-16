@@ -13,11 +13,11 @@ terraform {
 }
 
 
-provider "intersight" {
-  apikey        = var.api_key_id
-  secretkey = var.api_private_key
-  endpoint      = var.api_endpoint
-}
+#provider "intersight" {
+#  apikey        = var.api_key_id
+#  secretkey = var.api_private_key
+#  endpoint      = var.api_endpoint
+#}
 
 data "intersight_kubernetes_cluster" "ikscluster" {
   name  = var.iksclustername
