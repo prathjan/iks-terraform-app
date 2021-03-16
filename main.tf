@@ -1,10 +1,10 @@
 # Intersight Provider Information
 terraform {
   required_providers {
-    intersight = {
-      source = "CiscoDevNet/intersight"
-      version = "1.0.2"
-    }
+#    intersight = {
+#      source = "CiscoDevNet/intersight"
+#      version = "1.0.2"
+#    }
     helm = {
       source = "hashicorp/helm"
       version = "2.0.3"
@@ -26,10 +26,14 @@ data "intersight_kubernetes_cluster" "ikscluster" {
 
 provider "helm" {
   kubernetes {
-    host = local.kube_config.clusters[0].cluster.server
-    client_certificate = base64decode(local.kube_config.users[0].user.client-certificate-data)
-    client_key = base64decode(local.kube_config.users[0].user.client-key-data)
-    cluster_ca_certificate = base64decode(local.kube_config.clusters[0].cluster.certificate-authority-data)
+    host = var.host 
+    client_certificate = var.clcert 
+    client_key = var.clkey 
+    cluster_ca_certificate = var.cacert 
+#    host = local.kube_config.clusters[0].cluster.server
+#    client_certificate = base64decode(local.kube_config.users[0].user.client-certificate-data)
+#    client_key = base64decode(local.kube_config.users[0].user.client-key-data)
+#    cluster_ca_certificate = base64decode(local.kube_config.clusters[0].cluster.certificate-authority-data)
   }
 }
 
@@ -50,9 +54,9 @@ variable "iksclustername" {
   type = string
 }
 
-locals {
-  kube_config = yamldecode(base64decode(data.intersight_kubernetes_cluster.ikscluster.results[0].kube_config))
-}
+#locals {
+#  kube_config = yamldecode(base64decode(data.intersight_kubernetes_cluster.ikscluster.results[0].kube_config))
+#}
 
 resource helm_release nginx_ingress {
   name       = "nginx-ingress-controller"
