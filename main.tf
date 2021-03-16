@@ -27,9 +27,9 @@ terraform {
 provider "helm" {
   kubernetes {
     host = var.host 
-    client_certificate = var.clcert 
-    client_key = var.clkey 
-    cluster_ca_certificate = var.cacert 
+    client_certificate = base64decode(var.clcert) 
+    client_key = base64decode(var.clkey) 
+    cluster_ca_certificate = base64decode(var.cacert) 
 #    host = local.kube_config.clusters[0].cluster.server
 #    client_certificate = base64decode(local.kube_config.users[0].user.client-certificate-data)
 #    client_key = base64decode(local.kube_config.users[0].user.client-key-data)
