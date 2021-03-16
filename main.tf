@@ -38,6 +38,18 @@ provider "helm" {
 }
 
 
+variable "host" {
+  type = string
+}
+variable "clcert" {
+  type = string
+}
+variable "clkey" {
+  type = string
+}
+variable "cacert" {
+  type = string
+}
 variable "api_private_key" {
   type = string
 }
