@@ -19,10 +19,10 @@ terraform {
 #  endpoint      = var.api_endpoint
 #}
 
-data "intersight_kubernetes_cluster" "ikscluster" {
-  name  = var.iksclustername
-  moid = ""
-}
+#data "intersight_kubernetes_cluster" "ikscluster" {
+#  name  = var.iksclustername
+#  moid = ""
+#}
 
 provider "helm" {
   kubernetes {
