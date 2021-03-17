@@ -78,7 +78,11 @@ resource helm_release nginx_ingress {
 
   set {
     name  = "service.type"
-    value = "ClusterIP"
+    value = "LoadBalancer"
   }
 }
 
+
+output "lb_ip" {
+	value = kubernetes_service.nginx-ingress-controller.status.0.load_balancer.0.ingress.0.hostname
+}
