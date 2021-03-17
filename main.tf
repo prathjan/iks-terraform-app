@@ -84,5 +84,5 @@ resource helm_release nginx_ingress {
 
 
 output "lb_ip" {
-	value = kubernetes_service.nginx-ingress-controller.status.0.load_balancer.0.ingress.0.hostname
+	value = helm_release.nginx_ingress
 }
