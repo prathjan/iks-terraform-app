@@ -1,23 +1,37 @@
 # Intersight Provider Information
-terraform {
-  required_providers {
-    intersight = {
-      source = "CiscoDevNet/intersight"
-      version = "1.0.3"
+#terraform {
+#  required_providers {
+#    intersight = {
+#      source = "CiscoDevNet/intersight"
+#      version = "1.0.3"
+#    }
+#  }
+#}
+
+
+data "terraform_remote_state" "iksws" {
+  backend = "remote"
+  config = {
+    organization = "CiscoDevNet"
+    workspaces = {
+      name = "sandbox2"
     }
   }
 }
 
-provider "intersight" {
-  apikey        = var.api_key_id
-  secretkey = var.api_private_key
-  endpoint      = var.api_endpoint
-}
 
-data "intersight_kubernetes_cluster" "ikscluster" {
-  name  = var.iksclustername
-  moid = ""
-}
+
+
+#provider "intersight" {
+#  apikey        = var.api_key_id
+#  secretkey = var.api_private_key
+#  endpoint      = var.api_endpoint
+#}
+
+#data "intersight_kubernetes_cluster" "ikscluster" {
+#  name  = var.iksclustername
+#  moid = ""
+#}
 
 provider "helm" {
   kubernetes {
@@ -46,7 +60,8 @@ variable "iksclustername" {
 }
 
 locals {
-  kube_config = yamldecode(base64decode(data.intersight_kubernetes_cluster.ikscluster.results[0].kube_config))
+  kube_config = yamldecode(base64decode(terraform_remote_state.iksws.outputs.kube_config))
+  #kube_config = yamldecode(base64decode(data.intersight_kubernetes_cluster.ikscluster.results[0].kube_config))
 }
 
 
