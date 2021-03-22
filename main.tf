@@ -107,7 +107,7 @@ provider "helm" {
 
 locals {
   #content  = base64decode(data.intersight_kubernetes_cluster.ikscluster.kube_config)
-  kube_config = yamldecode(base64decode(data.terraform_remote_state.iksws.outputs.kube_config))
+  kube_config = yamldecode(data.terraform_remote_state.iksws.outputs.kube_config)
   #filename = "/tmp/config"
 }
 
