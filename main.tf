@@ -71,7 +71,7 @@ variable "iksclustername" {
 }
 
 locals {
-  kube_config = yamldecode(base64decode(terraform_remote_state.iksws.outputs.kube_config))
+  kube_config = yamldecode(base64decode(data.terraform_remote_state.iksws.outputs.kube_config))
   #kube_config = yamldecode(base64decode(data.intersight_kubernetes_cluster.ikscluster.results[0].kube_config))
 }
 
