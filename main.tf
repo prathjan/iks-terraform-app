@@ -88,3 +88,27 @@ resource helm_release nginx_ingress {
   }
 }
 
+
+
+
+
+
+provider "helm" {
+  kubernetes {
+    #config_path = "/tmp/config"
+    host = local.kube_config.clusters[0].cluster.server
+    client_certificate = base64decode(local.kube_config.users[0].user.client-certificate-data)
+    client_key = base64decode(local.kube_config.users[0].user.client-key-data)
+    cluster_ca_certificate = base64decode(local.kube_config.clusters[0].cluster.certificate-authority-data)
+  }
+}
+
+
+
+locals {
+  #content  = base64decode(data.intersight_kubernetes_cluster.ikscluster.kube_config)
+  kube_config = yamldecode(base64decode(data.terraform_remote_state.iksws.outputs.kube_config))
+  #filename = "/tmp/config"
+}
+
+
