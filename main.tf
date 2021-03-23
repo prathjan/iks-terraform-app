@@ -9,17 +9,6 @@ data "terraform_remote_state" "iksws" {
   }
 }
 
-variable "api_private_key" {
-  type = string
-}
-
-variable "api_key_id" {
-  type = string
-}
-
-variable "api_endpoint" {
-  default = "https://www.intersight.com"
-}
 
 variable "iksclustername" {
   type = string
